@@ -2,12 +2,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Random;
 
 public class FrmJuego extends JFrame {
+
+    // atributos
+    private int lanzamientos, cenas;
+
+    // agregaciones
+    private Dado dado1 = new Dado();
+    private Dado dado2 = new Dado();
+    private Random r = new Random();
+    JLabel lblDado1, lblDado2;
+    JLabel lblLanzamientos, lblCenas;
 
     // metodo constructor
     public FrmJuego() {
@@ -19,13 +29,13 @@ public class FrmJuego extends JFrame {
         String archivoIamgenes = "imagenes/4.jpg";
         ImageIcon imgDado = new ImageIcon(getClass().getResource(archivoIamgenes));
 
-        JLabel lblDado1 = new JLabel(imgDado);
+        lblDado1 = new JLabel(imgDado);
         lblDado1.setIcon(imgDado);
 
         lblDado1.setBounds(10, 10, imgDado.getIconWidth(), imgDado.getIconHeight());
         add(lblDado1);
 
-        JLabel lblDado2 = new JLabel(imgDado);
+        lblDado2 = new JLabel(imgDado);
         lblDado2.setIcon(imgDado);
 
         lblDado2.setBounds(20 + imgDado.getIconWidth(), 10, imgDado.getIconWidth(), imgDado.getIconHeight());
@@ -36,7 +46,7 @@ public class FrmJuego extends JFrame {
         lblTituloLanzamientos.setBounds(30 + imgDado.getIconWidth() * 2, 10, 100, 25);
         add(lblTituloLanzamientos);
 
-        JLabel lblLanzamientos = new JLabel("0");
+        lblLanzamientos = new JLabel("0");
         lblLanzamientos.setFont(new Font("Impact", Font.BOLD, 72));
         lblLanzamientos.setBackground(new Color(0, 0, 0));
         lblLanzamientos.setForeground(new Color(0, 255, 0));
@@ -50,7 +60,7 @@ public class FrmJuego extends JFrame {
         lblTituloCenas.setBounds(140 + imgDado.getIconWidth() * 2, 10, 100, 25);
         add(lblTituloCenas);
 
-        JLabel lblCenas = new JLabel("0");
+        lblCenas = new JLabel("0");
         lblCenas.setFont(new Font("Impact", Font.BOLD, 72));
         lblCenas.setBackground(new Color(0, 0, 0));
         lblCenas.setForeground(new Color(0, 255, 0));
@@ -67,6 +77,7 @@ public class FrmJuego extends JFrame {
         btnLanzar.setBounds(10, 50 + imgDado.getIconHeight(), 100, 25);
         add(btnLanzar);
 
+        // eventos
         btnIniciar.addActionListener(e -> {
             iniciar();
         });
@@ -77,11 +88,27 @@ public class FrmJuego extends JFrame {
     }
 
     private void iniciar() {
-        JOptionPane.showMessageDialog(null, "Hizo clic en INICIAR");
+        lanzamientos = 0;
+        cenas = 0;
+        lblLanzamientos.setText(String.valueOf(lanzamientos));
+        lblCenas.setText(String.valueOf(cenas));
     }
 
     private void lanzar() {
-        JOptionPane.showMessageDialog(null, "Hizo clic en LANZAR");
+        dado1.lanzar(r);
+        dado2.lanzar(r);
+
+        dado1.mostrar(lblDado1);
+        dado2.mostrar(lblDado2);
+
+        lanzamientos++;
+        lblLanzamientos.setText(String.valueOf(lanzamientos));
+
+        if (dado1.getNumero() + dado2.getNumero() >= 11) {
+            cenas++;
+            lblCenas.setText(String.valueOf(cenas));
+        }
+
     }
 
 }
